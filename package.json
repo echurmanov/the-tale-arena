@@ -1,0 +1,30 @@
+{
+  "name": "the-tale-arena",
+  "version": "0.1.0",
+  "description": "Tale Arena Test",
+  "main": "src/index.js",
+  "scripts": {
+    "build-front": "webpack --config src-front/webpack.config.js --mode development",
+    "build-front-prod": "webpack --config src-front/webpack.config.js --mode production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/echurmanov/the-tale-arena.git"
+  },
+  "author": "Eugene Churmanov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/echurmanov/the-tale-arena/issues"
+  },
+  "homepage": "https://github.com/echurmanov/the-tale-arena#readme",
+  "devDependencies": {
+    "@types/node": "^14.14.8",
+    "css-loader": "^5.0.1",
+    "ts-loader": "^8.0.11",
+    "ts-node": "^9.0.0",
+    "typescript": "^3.9.5",
+    "webpack": "^5.5.1",
+    "webpack-cli": "^4.2.0"
+  }
+}
