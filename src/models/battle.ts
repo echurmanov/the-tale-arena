@@ -323,10 +323,6 @@ export class Battle {
 
                     const actionsLog = applyEffects(attackers, defenders,  effects);
 
-                    console.log("===Action Logs===>");
-                    console.log(actionsLog);
-
-
                     this.turnStage = NEXT_STAGE[this.turnStage] || this.turnStage;
 
                     break;

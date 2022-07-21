@@ -1,4 +1,4 @@
-import {isCloseCombatEffect, isRangeCombatEffect} from "./utils";
+import {isCloseCombatEffect, isPhysicalCombatDamageEffect, isRangeCombatEffect} from "./utils";
 import {IActor, ISide} from "./battle";
 
 export enum EEffectType {
@@ -137,7 +137,7 @@ function damageEffectProcessor(attackers: ISide, defenders: ISide, source: IActo
         || (isRangeCombatEffect(effect.type) && distanceToTarget > 4)
     ) {
         log.push({source, target, result: 'error', message: "Target over distance"});
-        return;
+        return log;
     }
 
     let successPower = effect.power;
@@ -149,26 +149,26 @@ function damageEffectProcessor(attackers: ISide, defenders: ISide, source: IActo
             }
 
             if (idx === blocksBeforeTarget.length - 1) {
-                const blockedIndividualNumber = Math.min(successPower, blocks[EEffectType.PHYSICAL_INDIVIDUAL_BLOCK] || 0);
+                const blockType = isPhysicalCombatDamageEffect(effect.type) ? EEffectType.PHYSICAL_INDIVIDUAL_BLOCK : EEffectType.MAGIC_INDIVIDUAL_BLOCK;
+                const blockedIndividualNumber = Math.min(successPower, blocks[blockType] || 0);
 
                 if (blockedIndividualNumber) {
                     successPower -= blockedIndividualNumber;
-                    blocks[EEffectType.PHYSICAL_INDIVIDUAL_BLOCK] -= blockedIndividualNumber;
-                    log.push({source, target: defenders.actors[idx], effect: EEffectType.PHYSICAL_INDIVIDUAL_BLOCK, power: blockedIndividualNumber})
+                    blocks[blockType] -= blockedIndividualNumber;
+                    log.push({source, target: defenders.actors[idx], effect: blockType, power: blockedIndividualNumber})
                 }
             }
 
-            const blockedNumber = Math.min(successPower, blocks[EEffectType.PHYSICAL_COVER_BLOCK] || 0);
+            const blockType = isPhysicalCombatDamageEffect(effect.type) ? EEffectType.PHYSICAL_COVER_BLOCK : EEffectType.MAGIC_COVER_BLOCK;
+            const blockedNumber = Math.min(successPower, blocks[blockType] || 0);
 
             if (blockedNumber) {
                 successPower -= blockedNumber;
-                blocks[EEffectType.PHYSICAL_COVER_BLOCK] -= blockedNumber;
-                log.push({source, target: defenders.actors[idx], effect: EEffectType.PHYSICAL_COVER_BLOCK, power: blockedNumber})
+                blocks[blockType] -= blockedNumber;
+                log.push({source, target: defenders.actors[idx], effect: blockType, power: blockedNumber})
             }
         })
     }
-
-    console.log("StrikeProcess===>", effect);
 
     if (successPower > 0) {
         target.health -= successPower
