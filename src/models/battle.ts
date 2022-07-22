@@ -40,7 +40,7 @@ export interface IActor {
     hand: ICard[];
     preparedAction?: {
         card: ICard;
-        target: IActor;
+        target?: IActor;
     };
     blocks: Partial<Record<TBlockEffect, number>>;
     discards: ICard[];
@@ -64,10 +64,10 @@ export interface IUserAction {
     payload: any;
 }
 
-export type TBlockEffect = EEffectType.PHYSICAL_INDIVIDUAL_BLOCK
+export type TBlockEffect = EEffectType.PHYSIC_INDIVIDUAL_BLOCK
     | EEffectType.MAGIC_INDIVIDUAL_BLOCK
     | EEffectType.UNIVERSAL_INDIVIDUAL_BLOCK
-    | EEffectType.PHYSICAL_COVER_BLOCK
+    | EEffectType.PHYSIC_COVER_BLOCK
     | EEffectType.MAGIC_COVER_BLOCK
     | EEffectType.UNIVERSAL_COVER_BLOCK;
 
@@ -76,11 +76,11 @@ export interface ISide {
 }
 
 const BLOCK_EFFECT_LIST: EEffectType[] = [
-    EEffectType.PHYSICAL_INDIVIDUAL_BLOCK,
+    EEffectType.PHYSIC_INDIVIDUAL_BLOCK,
     EEffectType.MAGIC_INDIVIDUAL_BLOCK,
     EEffectType.UNIVERSAL_INDIVIDUAL_BLOCK,
 
-    EEffectType.PHYSICAL_COVER_BLOCK,
+    EEffectType.PHYSIC_COVER_BLOCK,
     EEffectType.MAGIC_COVER_BLOCK,
     EEffectType.UNIVERSAL_COVER_BLOCK,
 ];

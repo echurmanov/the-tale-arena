@@ -37,7 +37,7 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
             skillLevel: 1,
             effects: [
                 {
-                    type: EEffectType.PHYSICAL_CLOSE_DAMAGE,
+                    type: EEffectType.PHYSIC_CLOSE_DAMAGE,
                     power: 1,
                 }
             ]
@@ -48,7 +48,7 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
             skillLevel: 1,
             effects: [
                 {
-                    type: EEffectType.PHYSICAL_CLOSE_DAMAGE,
+                    type: EEffectType.PHYSIC_CLOSE_DAMAGE,
                     power: 2,
                 }
             ]
@@ -59,7 +59,7 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
             skillLevel: 1,
             effects: [
                 {
-                    type: EEffectType.PHYSICAL_INDIVIDUAL_BLOCK,
+                    type: EEffectType.PHYSIC_INDIVIDUAL_BLOCK,
                     power: 1,
                 }
             ]
@@ -70,11 +70,11 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
             skillLevel: 1,
             effects: [
                 {
-                    type: EEffectType.PHYSICAL_INDIVIDUAL_BLOCK,
+                    type: EEffectType.PHYSIC_INDIVIDUAL_BLOCK,
                     power: 1,
                 },
                 {
-                    type: EEffectType.PHYSICAL_CLOSE_DAMAGE,
+                    type: EEffectType.PHYSIC_CLOSE_DAMAGE,
                     power: 1,
                 }
             ]
@@ -99,7 +99,7 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
             skillLevel: 1,
             effects: [
                 {
-                    type: EEffectType.PHYSICAL_INDIVIDUAL_BLOCK,
+                    type: EEffectType.PHYSIC_INDIVIDUAL_BLOCK,
                     power: 1
                 },
                 {
@@ -117,7 +117,7 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
             skillLevel: 1,
             effects: [
                 {
-                    type: EEffectType.PHYSICAL_CLOSE_DAMAGE,
+                    type: EEffectType.PHYSIC_CLOSE_DAMAGE,
                     power: 1,
                     isUnblockable: true,
                 }
@@ -131,7 +131,7 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
             skillLevel: 1,
             effects: [
                 {
-                    type: EEffectType.PHYSICAL_CLOSE_DAMAGE,
+                    type: EEffectType.PHYSIC_CLOSE_DAMAGE,
                     power: 1,
                 }
             ]
@@ -144,7 +144,7 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
             skillLevel: 1,
             effects: [
                 {
-                    type: EEffectType.PHYSICAL_CLOSE_DAMAGE,
+                    type: EEffectType.PHYSIC_CLOSE_DAMAGE,
                     power: 1,
                     isSuccessEffects: [
                         {
@@ -162,7 +162,7 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
             skillLevel: 2,
             effects: [
                 {
-                    type: EEffectType.PHYSICAL_CLOSE_DAMAGE,
+                    type: EEffectType.PHYSIC_CLOSE_DAMAGE,
                     power: 2,
                     perSuccessEffects: [
                         {
@@ -183,7 +183,7 @@ const cardList: ICard[] = [
         skillLevel: 1,
         effects: [
             {
-                type: EEffectType.PHYSICAL_CLOSE_DAMAGE,
+                type: EEffectType.PHYSIC_CLOSE_DAMAGE,
                 power: 1,
                 isFlash: false,
                 isSuccessEffects: [],
@@ -197,7 +197,7 @@ const cardList: ICard[] = [
         skillLevel: 1,
         effects: [
             {
-                type: EEffectType.PHYSICAL_CLOSE_DAMAGE,
+                type: EEffectType.PHYSIC_CLOSE_DAMAGE,
                 power: 2,
                 isFlash: false,
                 isSuccessEffects: [],
@@ -211,7 +211,7 @@ const cardList: ICard[] = [
         skillLevel: 1,
         effects: [
             {
-                type: EEffectType.PHYSICAL_INDIVIDUAL_BLOCK,
+                type: EEffectType.PHYSIC_INDIVIDUAL_BLOCK,
                 power: 1,
                 isFlash: false,
                 isSuccessEffects: [],
@@ -225,14 +225,14 @@ const cardList: ICard[] = [
         skillLevel: 1,
         effects: [
             {
-                type: EEffectType.PHYSICAL_INDIVIDUAL_BLOCK,
+                type: EEffectType.PHYSIC_INDIVIDUAL_BLOCK,
                 power: 1,
                 isFlash: false,
                 isSuccessEffects: [],
                 perSuccessEffects: [],
             },
             {
-                type: EEffectType.PHYSICAL_CLOSE_DAMAGE,
+                type: EEffectType.PHYSIC_CLOSE_DAMAGE,
                 power: 1,
                 isFlash: false,
                 isSuccessEffects: [],

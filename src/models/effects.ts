@@ -1,24 +1,30 @@
-import {isCloseCombatEffect, isPhysicalCombatDamageEffect, isRangeCombatEffect} from "./utils";
-import {IActor, ISide} from "./battle";
+import {
+    isBlockingEffect, isBlockingType,
+    isCloseCombatEffect,
+    isDirectCombatEffect,
+    isPhysicalCombatDamageEffect,
+    isRangeCombatEffect
+} from "./utils";
+import {IActor, ISide, TBlockEffect} from "./battle";
 
 export enum EEffectType {
-    PHYSICAL_CLOSE_DAMAGE = 'PHYSICAL_CLOSE_DAMAGE',
+    PHYSIC_CLOSE_DAMAGE = 'PHYSIC_CLOSE_DAMAGE',
     MAGIC_CLOSE_DAMAGE = 'MAGIC_CLOSE_DAMAGE',
 
-    PHYSICAL_RANGE_DAMAGE = 'PHYSICAL_RANGE_DAMAGE',
+    PHYSIC_RANGE_DAMAGE = 'PHYSIC_RANGE_DAMAGE',
     MAGIC_RANGE_DAMAGE = 'MAGIC_RANGE_DAMAGE',
 
-    PHYSICAL_DIRECT_DAMAGE = 'PHYSICAL_DIRECT_DAMAGE',
+    PHYSIC_DIRECT_DAMAGE = 'PHYSIC_DIRECT_DAMAGE',
     MAGIC_DIRECT_DAMAGE = 'MAGIC_DIRECT_DAMAGE',
 
     PHYSIC_PERIODIC_DAMAGE = 'PHYSIC_PERIODIC_DAMAGE',
     MAGIC_PERIODIC_DAMAGE = 'MAGIC_PERIODIC_DAMAGE',
 
-    PHYSICAL_INDIVIDUAL_BLOCK = 'PHYSICAL_INDIVIDUAL_BLOCK',
+    PHYSIC_INDIVIDUAL_BLOCK = 'PHYSIC_INDIVIDUAL_BLOCK',
     MAGIC_INDIVIDUAL_BLOCK = 'MAGIC_INDIVIDUAL_BLOCK',
     UNIVERSAL_INDIVIDUAL_BLOCK = 'UNIVERSAL_INDIVIDUAL_BLOCK',
 
-    PHYSICAL_COVER_BLOCK = 'PHYSICAL_COVER_BLOCK',
+    PHYSIC_COVER_BLOCK = 'PHYSIC_COVER_BLOCK',
     MAGIC_COVER_BLOCK = 'MAGIC_COVER_BLOCK',
     UNIVERSAL_COVER_BLOCK = 'UNIVERSAL_COVER_BLOCK',
 
@@ -107,9 +113,9 @@ export function applyEffects(attackers: ISide, defenders: ISide, effects: IActiv
             }
 
             switch (effect.type) {
-                case EEffectType.PHYSICAL_RANGE_DAMAGE:
-                case EEffectType.PHYSICAL_CLOSE_DAMAGE:
-                case EEffectType.PHYSICAL_DIRECT_DAMAGE:
+                case EEffectType.PHYSIC_RANGE_DAMAGE:
+                case EEffectType.PHYSIC_CLOSE_DAMAGE:
+                case EEffectType.PHYSIC_DIRECT_DAMAGE:
                 case EEffectType.MAGIC_RANGE_DAMAGE:
                 case EEffectType.MAGIC_CLOSE_DAMAGE:
                 case EEffectType.MAGIC_DIRECT_DAMAGE:
@@ -141,6 +147,7 @@ function damageEffectProcessor(attackers: ISide, defenders: ISide, source: IActo
     }
 
     let successPower = effect.power;
+    let blockPower: Partial<Record<TBlockEffect, number>>[] = [];
 
     if (!effect.isUnblockable) {
         blocksBeforeTarget.forEach((blocks, idx) => {
@@ -148,25 +155,38 @@ function damageEffectProcessor(attackers: ISide, defenders: ISide, source: IActo
                 return;
             }
 
+            blockPower[idx] = {};
+
+            const blockTypes: TBlockEffect[] = [];
+
             if (idx === blocksBeforeTarget.length - 1) {
-                const blockType = isPhysicalCombatDamageEffect(effect.type) ? EEffectType.PHYSICAL_INDIVIDUAL_BLOCK : EEffectType.MAGIC_INDIVIDUAL_BLOCK;
-                const blockedIndividualNumber = Math.min(successPower, blocks[blockType] || 0);
+                blockTypes.push(
+                    isPhysicalCombatDamageEffect(effect.type) ? EEffectType.PHYSIC_INDIVIDUAL_BLOCK : EEffectType.MAGIC_INDIVIDUAL_BLOCK,
+                    EEffectType.UNIVERSAL_INDIVIDUAL_BLOCK
+                );
+            }
 
-                if (blockedIndividualNumber) {
-                    successPower -= blockedIndividualNumber;
-                    blocks[blockType] -= blockedIndividualNumber;
-                    log.push({source, target: defenders.actors[idx], effect: blockType, power: blockedIndividualNumber})
+            if (!isDirectCombatEffect(effect.type) || idx === blocksBeforeTarget.length - 1) {
+                blockTypes.push(
+                    isPhysicalCombatDamageEffect(effect.type) ? EEffectType.PHYSIC_COVER_BLOCK : EEffectType.MAGIC_COVER_BLOCK,
+                    EEffectType.UNIVERSAL_COVER_BLOCK
+                );
+            }
+
+            blockTypes.forEach((blockType) => {
+                if (successPower === 0) {
+                    return;
                 }
-            }
 
-            const blockType = isPhysicalCombatDamageEffect(effect.type) ? EEffectType.PHYSICAL_COVER_BLOCK : EEffectType.MAGIC_COVER_BLOCK;
-            const blockedNumber = Math.min(successPower, blocks[blockType] || 0);
+                const blockedNumber = Math.min(successPower, blocks[blockType] || 0);
 
-            if (blockedNumber) {
-                successPower -= blockedNumber;
-                blocks[blockType] -= blockedNumber;
-                log.push({source, target: defenders.actors[idx], effect: blockType, power: blockedNumber})
-            }
+                if (blockedNumber) {
+                    successPower -= blockedNumber;
+                    blocks[blockType] -= blockedNumber;
+                    log.push({source, target: defenders.actors[idx], effect: blockType, power: blockedNumber});
+                    blockPower[idx][blockType] = blockedNumber;
+                }
+            });
         })
     }
 
@@ -189,9 +209,42 @@ function damageEffectProcessor(attackers: ISide, defenders: ISide, source: IActo
                     defenders,
                     [{source, target, effects: [Object.assign({}, effect, {power: successPower})]}]
                 ));
-            })
+            });
         }
     }
+
+    blockPower.forEach((power, idx) => {
+        if (!power || !defenders.actors[idx].preparedAction) return;
+
+        const blockerAction = defenders.actors[idx].preparedAction;
+
+        blockerAction.card.effects.forEach((effect: IEffect) => {
+            if (isBlockingType(effect.type)) {
+                const blockPower = power[effect.type];
+                if (effect.isSuccessEffects && effect.isSuccessEffects.length > 0 && blockPower) {
+                    log.push(...applyEffects(defenders, attackers, [{
+                        source: defenders.actors[idx],
+                        target: source,
+                        effects: effect.isSuccessEffects
+                    }]))
+                }
+
+                if (effect.perSuccessEffects && effect.perSuccessEffects.length > 0 && blockPower) {
+                    effect.perSuccessEffects.forEach(effect => {
+                        log.push(...applyEffects(
+                            defenders,
+                            attackers,
+                            [{
+                                source: defenders.actors[idx],
+                                target: source,
+                                effects: [Object.assign({}, effect, {power: blockPower})]
+                            }]
+                        ));
+                    });
+                }
+            }
+        })
+    })
 
     return log;
 }
