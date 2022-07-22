@@ -109,7 +109,7 @@ export function applyEffects(attackers: ISide, defenders: ISide, effects: IActiv
             }
 
             if (!actualTarget) {
-                log.push({source, result: 'error', message: 'No target'});
+                return log;
             }
 
             switch (effect.type) {

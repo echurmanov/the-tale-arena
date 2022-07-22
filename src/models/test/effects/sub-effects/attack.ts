@@ -347,6 +347,42 @@ describe('Эффекты которые активирутся', () => {
             ]);
         })
 
+        it('Под-эффект применяться на соседние цели и не ломается, если их нет', () => {
+            const attacker = createSideStub(1, 'Атакующий');
+            const defender = createSideStub(1, 'Защитник');
+
+            const log = applyEffects(attacker, defender, [
+                {
+                    source: attacker.actors[0],
+                    target: defender.actors[0],
+                    effects: [
+                        {
+                            type: EEffectType.PHYSIC_RANGE_DAMAGE,
+                            power: 1,
+                            isSuccessEffects: [
+                                {
+                                    target: 'left',
+                                    type: EEffectType.MAGIC_DIRECT_DAMAGE,
+                                    power: 1,
+                                },
+                                {
+                                    target: 'right',
+                                    type: EEffectType.PHYSIC_DIRECT_DAMAGE,
+                                    power: 1,
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]);
+
+            assert.equal(defender.actors[0].health, 9);
+
+            assert.deepEqual(log, [
+                {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.PHYSIC_RANGE_DAMAGE},
+            ]);
+        })
+
         it('Под-эффект могут применяться на атакующего', () => {
             const attacker = createSideStub(1, 'Атакующий');
             const defender = createSideStub(1, 'Защитник');
