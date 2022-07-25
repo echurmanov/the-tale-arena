@@ -1,5 +1,4 @@
-import {EEffectType} from "./effects";
-import {EActorType, IActor, ISide, TBlockEffect} from "./battle";
+import {EEffectType, TBlockEffect} from "./effects";
 
 export function isCombatEffect(effect: EEffectType): boolean {
     return isMagicCombatDamageEffect(effect) || isPhysicalCombatDamageEffect(effect);
@@ -37,5 +36,12 @@ export function isBlockingEffect(effect: EEffectType): boolean {
 }
 
 export function isBlockingType(effectType: EEffectType): effectType is TBlockEffect {
-    return isBlockingEffect(effectType);
+    return [
+        EEffectType.MAGIC_COVER_BLOCK,
+        EEffectType.PHYSIC_COVER_BLOCK,
+        EEffectType.UNIVERSAL_COVER_BLOCK,
+        EEffectType.MAGIC_INDIVIDUAL_BLOCK,
+        EEffectType.PHYSIC_INDIVIDUAL_BLOCK,
+        EEffectType.UNIVERSAL_INDIVIDUAL_BLOCK
+    ].includes(effectType);
 }

@@ -1,4 +1,5 @@
 import {EEffectType, IEffect} from "./effects";
+import {ICardTrait} from "./card-traits";
 
 export enum ESkills {
     PHYSIC_COMBAT = 'PHYSIC_COMBAT',
@@ -26,6 +27,7 @@ export interface ICard {
     skill: ESkills;
     skillLevel: number;
     effects: IEffect[];
+    traits: ICardTrait[];
 }
 
 
@@ -40,7 +42,8 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
                     type: EEffectType.PHYSIC_CLOSE_DAMAGE,
                     power: 1,
                 }
-            ]
+            ],
+            traits: []
         },
         {
             name: 'Kick',
@@ -51,7 +54,8 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
                     type: EEffectType.PHYSIC_CLOSE_DAMAGE,
                     power: 2,
                 }
-            ]
+            ],
+            traits: []
         },
         {
             name: 'Block',
@@ -62,7 +66,8 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
                     type: EEffectType.PHYSIC_INDIVIDUAL_BLOCK,
                     power: 1,
                 }
-            ]
+            ],
+            traits: []
         },
         {
             name: 'ContrStrike',
@@ -77,7 +82,8 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
                     type: EEffectType.PHYSIC_CLOSE_DAMAGE,
                     power: 1,
                 }
-            ]
+            ],
+            traits: []
         },
         {
             name: 'Evade',
@@ -88,7 +94,8 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
                     type: EEffectType.UNIVERSAL_INDIVIDUAL_BLOCK,
                     power: 2,
                 }
-            ]
+            ],
+            traits: []
         }
     ],
 
@@ -106,7 +113,8 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
                     type: EEffectType.GAIN_HEALTH,
                     power: 1
                 }
-            ]
+            ],
+            traits: []
         }
     ],
 
@@ -121,7 +129,8 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
                     power: 1,
                     isUnblockable: true,
                 }
-            ]
+            ],
+            traits: []
         }
     ],
     [ESkills.NATURE]: [
@@ -134,7 +143,8 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
                     type: EEffectType.PHYSIC_CLOSE_DAMAGE,
                     power: 1,
                 }
-            ]
+            ],
+            traits: []
         }
     ],
     [ESkills.PHYSIC_VAMPIRE]: [
@@ -154,7 +164,8 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
                         }
                     ]
                 }
-            ]
+            ],
+            traits: []
         },
         {
             name: 'Bloody Hungry Bite',
@@ -167,11 +178,13 @@ export const skillTrees:Record<keyof typeof ESkills, ICard[]> = {
                     perSuccessEffects: [
                         {
                             type: EEffectType.GAIN_HEALTH,
-                            target: 'source'
+                            target: 'source',
+                            power: 0
                         }
                     ]
                 }
-            ]
+            ],
+            traits: []
         }
     ]
 };
@@ -189,7 +202,8 @@ const cardList: ICard[] = [
                 isSuccessEffects: [],
                 perSuccessEffects: [],
             }
-        ]
+        ],
+        traits: []
     },
     {
         name: 'Kick',
@@ -203,7 +217,8 @@ const cardList: ICard[] = [
                 isSuccessEffects: [],
                 perSuccessEffects: [],
             }
-        ]
+        ],
+        traits: []
     },
     {
         name: 'Block',
@@ -217,7 +232,8 @@ const cardList: ICard[] = [
                 isSuccessEffects: [],
                 perSuccessEffects: [],
             }
-        ]
+        ],
+        traits: []
     },
     {
         name: 'ContrStrike',
@@ -238,7 +254,8 @@ const cardList: ICard[] = [
                 isSuccessEffects: [],
                 perSuccessEffects: [],
             }
-        ]
+        ],
+        traits: []
     },
     {
         name: 'Evade',
@@ -252,7 +269,8 @@ const cardList: ICard[] = [
                 isSuccessEffects: [],
                 perSuccessEffects: [],
             }
-        ]
+        ],
+        traits: []
     }
 ];
 

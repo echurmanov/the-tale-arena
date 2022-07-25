@@ -51,7 +51,7 @@ describe('Эффекты которые активирутся', () => {
             assert.equal(defender.actors[0].health, 7);
             assert.deepEqual(log, [
                 {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.UNIVERSAL_INDIVIDUAL_BLOCK},
-                {source: defender.actors[0], target: defender.actors[0], power: 7, effect: EEffectType.SET_HEALTH},
+                {source: defender.actors[0], target: defender.actors[0], power: 2, effect: EEffectType.GAIN_HEALTH},
             ]);
         });
 
@@ -187,13 +187,13 @@ describe('Эффекты которые активирутся', () => {
                 {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.PHYSIC_INDIVIDUAL_BLOCK},
                 {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.PHYSIC_COVER_BLOCK},
                 {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.PHYSIC_DIRECT_DAMAGE},
-                {source: defender.actors[0], target: defender.actors[0], power: 2, effect: EEffectType.SET_HEALTH},
-                {source: defender.actors[0], target: defender.actors[0], power: 6, effect: EEffectType.SET_HEALTH},
+                {source: defender.actors[0], target: defender.actors[0], power: 2, effect: EEffectType.GAIN_HEALTH},
+                {source: defender.actors[0], target: defender.actors[0], power: 4, effect: EEffectType.GAIN_HEALTH},
                 {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.MAGIC_INDIVIDUAL_BLOCK},
                 {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.MAGIC_COVER_BLOCK},
                 {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.MAGIC_DIRECT_DAMAGE},
-                {source: defender.actors[0], target: defender.actors[0], power: 6, effect: EEffectType.SET_HEALTH},
-                {source: defender.actors[0], target: defender.actors[0], power: 9, effect: EEffectType.SET_HEALTH},
+                {source: defender.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.GAIN_HEALTH},
+                {source: defender.actors[0], target: defender.actors[0], power: 3, effect: EEffectType.GAIN_HEALTH},
             ]);
         });
 
@@ -240,7 +240,7 @@ describe('Эффекты которые активирутся', () => {
             assert.deepEqual(log, [
                 {source: attacker.actors[0], target: defender.actors[0], power: 2, effect: EEffectType.UNIVERSAL_INDIVIDUAL_BLOCK},
                 {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.PHYSIC_DIRECT_DAMAGE},
-                {source: defender.actors[0], target: defender.actors[0], power: 6, effect: EEffectType.SET_HEALTH},
+                {source: defender.actors[0], target: defender.actors[0], power: 2, effect: EEffectType.GAIN_HEALTH},
             ]);
         });
 
@@ -371,13 +371,13 @@ describe('Эффекты которые активирутся', () => {
             assert.deepEqual(log, [
                 {source: attacker.actors[0], target: defender.actors[0], power: 3, effect: EEffectType.PHYSIC_INDIVIDUAL_BLOCK},
                 {source: attacker.actors[0], target: defender.actors[0], power: 2, effect: EEffectType.PHYSIC_COVER_BLOCK},
-                {source: defender.actors[0], target: defender.actors[0], power: 4, effect: EEffectType.SET_HEALTH},
-                {source: defender.actors[0], target: defender.actors[0], power: 6, effect: EEffectType.SET_HEALTH},
+                {source: defender.actors[0], target: defender.actors[0], power: 3, effect: EEffectType.GAIN_HEALTH},
+                {source: defender.actors[0], target: defender.actors[0], power: 2, effect: EEffectType.GAIN_HEALTH},
                 {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.MAGIC_INDIVIDUAL_BLOCK},
                 {source: attacker.actors[0], target: defender.actors[0], power: 2, effect: EEffectType.MAGIC_COVER_BLOCK},
                 {source: attacker.actors[0], target: defender.actors[0], power: 2, effect: EEffectType.MAGIC_DIRECT_DAMAGE},
-                {source: defender.actors[0], target: defender.actors[0], power: 5, effect: EEffectType.SET_HEALTH},
-                {source: defender.actors[0], target: defender.actors[0], power: 7, effect: EEffectType.SET_HEALTH},
+                {source: defender.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.GAIN_HEALTH},
+                {source: defender.actors[0], target: defender.actors[0], power: 2, effect: EEffectType.GAIN_HEALTH},
             ]);
         });
 
@@ -437,7 +437,7 @@ describe('Эффекты которые активирутся', () => {
                 {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.PHYSIC_COVER_BLOCK},
                 {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.UNIVERSAL_COVER_BLOCK},
                 {source: attacker.actors[0], target: defender.actors[1], power: 1, effect: EEffectType.PHYSIC_RANGE_DAMAGE},
-                {source: defender.actors[0], target: defender.actors[0], power: 10, effect: EEffectType.SET_HEALTH},
+                {source: defender.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.GAIN_HEALTH},
                 {source: defender.actors[0], target: attacker.actors[0], power: 1, effect: EEffectType.PHYSIC_DIRECT_DAMAGE},
             ]);
 

@@ -1,6 +1,7 @@
-import {EActorType, IActor, ISide} from "../models/battle";
+import {ISide} from "../models/battle";
 import {IEffect} from "../models/effects";
 import {ESkills, ICard} from "../models/skills-cards";
+import {EActorType, IActor} from "../models/actor/actor";
 
 export function createActor(name: string): IActor {
     return {
@@ -11,7 +12,8 @@ export function createActor(name: string): IActor {
         hand: [],
         discards: [],
         deck: [],
-        blocks: {}
+        blocks: {},
+        traits: []
     };
 }
 
@@ -32,6 +34,7 @@ export function createCard(effects: IEffect[], name = 'Карта'): ICard {
         name: name,
         skill: ESkills.PHYSIC_COMBAT,
         skillLevel: 0,
-        effects
+        effects,
+        traits: []
     }
 }

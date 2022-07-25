@@ -41,7 +41,7 @@ describe('Эффекты которые активирутся', () => {
             assert.deepEqual(log, [
                 {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.PHYSIC_RANGE_DAMAGE},
                 {source: attacker.actors[0], target: defender.actors[1], power: 1, effect: EEffectType.PHYSIC_DIRECT_DAMAGE},
-                {source: attacker.actors[0], target: attacker.actors[0], power: 9, effect: EEffectType.SET_HEALTH},
+                {source: attacker.actors[0], target: attacker.actors[0], power: 1, effect: EEffectType.GAIN_HEALTH},
             ]);
             assert.equal(defender.actors[0].health, 9);
             assert.equal(defender.actors[1].health, 9);
@@ -86,7 +86,7 @@ describe('Эффекты которые активирутся', () => {
                 {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.PHYSIC_RANGE_DAMAGE},
                 {source: attacker.actors[0], target: defender.actors[1], power: 1, effect: EEffectType.PHYSIC_INDIVIDUAL_BLOCK},
                 {source: attacker.actors[0], target: defender.actors[1], power: 1, effect: EEffectType.PHYSIC_DIRECT_DAMAGE},
-                {source: attacker.actors[0], target: attacker.actors[0], power: 9, effect: EEffectType.SET_HEALTH},
+                {source: attacker.actors[0], target: attacker.actors[0], power: 1, effect: EEffectType.GAIN_HEALTH},
             ]);
             assert.equal(defender.actors[0].health, 9);
             assert.equal(defender.actors[1].health, 9);
@@ -135,7 +135,7 @@ describe('Эффекты которые активирутся', () => {
             assert.deepEqual(log, [
                 {source: attacker.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.PHYSIC_INDIVIDUAL_BLOCK},
                 {source: defender.actors[0], target: attacker.actors[0], power: 1, effect: EEffectType.PHYSIC_RANGE_DAMAGE},
-                {source: defender.actors[0], target: defender.actors[0], power: 9, effect: EEffectType.SET_HEALTH},
+                {source: defender.actors[0], target: defender.actors[0], power: 1, effect: EEffectType.GAIN_HEALTH},
             ]);
             assert.equal(defender.actors[0].health, 9);
             assert.equal(attacker.actors[0].health, 9);
@@ -180,11 +180,10 @@ describe('Эффекты которые активирутся', () => {
                 }
             ]);
 
-
             assert.deepEqual(log, [
                 {source: attacker.actors[0], target: defender.actors[0], power: 2, effect: EEffectType.PHYSIC_INDIVIDUAL_BLOCK},
                 {source: defender.actors[0], target: attacker.actors[1], power: 2, effect: EEffectType.PHYSIC_RANGE_DAMAGE},
-                {source: defender.actors[0], target: defender.actors[0], power: 9, effect: EEffectType.SET_HEALTH},
+                {source: defender.actors[0], target: defender.actors[0], power: 2, effect: EEffectType.GAIN_HEALTH},
             ]);
             assert.equal(attacker.actors[0].health, 10);
             assert.equal(attacker.actors[1].health, 8);

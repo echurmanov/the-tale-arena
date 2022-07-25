@@ -1,17 +1,13 @@
 import {shuffle} from "../utils/array-shuffler";
 
 import {ICard} from "./skills-cards";
-import {applyEffects, EEffectType} from "./effects";
+import {applyEffects, EEffectType, TBlockEffect} from "./effects";
+import {actorTakeCard, EActorType, IActor, IDrawCardResult} from "./actor/actor";
 
 
 export enum EBattleType {
     PvP = 'PvP',
     PvE = 'PvE',
-}
-
-export enum EActorType {
-    Player = 'Player',
-    Mob = 'Mob',
 }
 
 export enum ETurnStage {
@@ -26,26 +22,6 @@ export enum ETurnStage {
     APPLY_END_TURN_EFFECTS = 'APPLY_END_TURN_EFFECTS',
 }
 
-interface IDrawCardResult {
-    actor: IActor;
-    discardShuffled: boolean;
-    cards: ICard[];
-}
-
-export interface IActor {
-    name: string;
-    maxHealth: number;
-    health: number;
-    deck: ICard[];
-    hand: ICard[];
-    preparedAction?: {
-        card: ICard;
-        target?: IActor;
-    };
-    blocks: Partial<Record<TBlockEffect, number>>;
-    discards: ICard[];
-    type: EActorType;
-}
 
 interface IBattleState {
     turnNumber: number;
@@ -64,12 +40,7 @@ export interface IUserAction {
     payload: any;
 }
 
-export type TBlockEffect = EEffectType.PHYSIC_INDIVIDUAL_BLOCK
-    | EEffectType.MAGIC_INDIVIDUAL_BLOCK
-    | EEffectType.UNIVERSAL_INDIVIDUAL_BLOCK
-    | EEffectType.PHYSIC_COVER_BLOCK
-    | EEffectType.MAGIC_COVER_BLOCK
-    | EEffectType.UNIVERSAL_COVER_BLOCK;
+
 
 export interface ISide {
     actors: IActor[];
@@ -131,7 +102,8 @@ export class Battle {
             hand: [],
             discards: [],
             type,
-            blocks: {}
+            blocks: {},
+            traits: []
         };
     }
 
@@ -154,33 +126,6 @@ export class Battle {
     private isBattleEnded() {
         return this.sideA.actors.every(actor => actor.health === 0)
             || this.sideB.actors.every(actor => actor.health === 0);
-    }
-
-    private static actorTakeCard(actor: IActor, num: number = 1): IDrawCardResult {
-        const result: IDrawCardResult = {
-            actor: actor,
-            discardShuffled: false,
-            cards: []
-        };
-
-        for (let i = 0; i < num; i++) {
-            if (actor.type === EActorType.Mob && actor.hand.length > 0) {
-                break; // Мобы не "держат" в руке больше одной карты
-            }
-            if (actor.deck.length === 0 && actor.discards.length > 0) {
-                actor.deck = shuffle(actor.discards.slice());
-                actor.discards = [];
-                result.discardShuffled = true;
-            }
-
-            if (actor.deck.length) {
-                result.cards.push(actor.deck.shift())
-            }
-        }
-
-        actor.hand.push(...result.cards);
-
-        return result;
     }
 
     addActorSideA(name: string, maxHealth: number, baseDeck: ICard[], type: EActorType) {
@@ -235,8 +180,8 @@ export class Battle {
 
     private turnStart() {
         const drawResult = [
-            ...this.sideA.actors.map(actor => Battle.actorTakeCard(actor)),
-            ...this.sideB.actors.map(actor => Battle.actorTakeCard(actor))
+            ...this.sideA.actors.map(actor => actorTakeCard(actor)),
+            ...this.sideB.actors.map(actor => actorTakeCard(actor))
         ];
         this.resetSideBlocks(this.sideA);
         this.resetSideBlocks(this.sideB);
@@ -288,15 +233,11 @@ export class Battle {
 
             switch (this.turnStage) {
                 case ETurnStage.TURN_START:
-                    console.log("==Start turn==>", this.turnNumber);
                     yield this.turnStart();
                     break;
                 case ETurnStage.SELECT_ATTACKERS_CARD:
                 case ETurnStage.SELECT_DEFENDERS_CARD:
                     this.selectCards();
-                    console.log("SelectedCard");
-                    console.log(this.sideA.actors[0].name, this.sideA.actors[0].preparedAction);
-                    console.log(this.sideB.actors[0].name, this.sideB.actors[0].preparedAction);
                     break;
                 case ETurnStage.GENERATE_BLOCKS:
                     this.generateBlocks();
